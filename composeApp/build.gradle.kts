@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinCompose)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.ktlint)
 }
 
 kotlin {
@@ -19,8 +20,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(project(":shared"))
-                implementation("androidx.activity:activity-compose:1.9.1")
-                implementation("io.insert-koin:koin-android:3.5.6")
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.koin.android)
             }
         }
     }

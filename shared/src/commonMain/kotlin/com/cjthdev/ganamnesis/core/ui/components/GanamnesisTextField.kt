@@ -25,14 +25,14 @@ fun GanamnesisTextField(
     modifier: Modifier = Modifier,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     Column(modifier = modifier) {
         Text(
             text = label,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = Color.Black,
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
@@ -43,11 +43,13 @@ fun GanamnesisTextField(
             shape = RoundedCornerShape(24.dp),
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
+            singleLine = true,
             visualTransformation = visualTransformation,
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.LightGray,
-                focusedBorderColor = Color.Black
-            )
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = Color.LightGray,
+                    focusedBorderColor = Color.Black,
+                ),
         )
     }
 }

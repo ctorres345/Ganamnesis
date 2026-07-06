@@ -7,7 +7,7 @@ data class User(
     val avatarUrl: String? = null,
     val steamKey: String? = null,
     val steamId: String? = null,
-    val rawgKey: String? = null,
     val retroUser: String? = null,
-    val retroApiKey: String? = null
+    val retroApiKey: String? = null,
+    val hasCompletedSetup: Boolean = false,
 )

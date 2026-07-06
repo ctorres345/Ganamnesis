@@ -11,20 +11,24 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 
 class AndroidGoogleAuthHandler(
     private val context: Context,
-    private val webClientId: String
+    private val webClientId: String,
 ) : GoogleAuthHandler {
     private val credentialManager = CredentialManager.create(context)
 
     override suspend fun signIn(): GoogleSignInResult {
-        val googleIdTokenOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(webClientId)
-            .setAutoSelectEnabled(true)
-            .build()
+        val googleIdTokenOption =
+            GetGoogleIdOption
+                .Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientId)
+                .setAutoSelectEnabled(true)
+                .build()
 
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdTokenOption)
-            .build()
+        val request =
+            GetCredentialRequest
+                .Builder()
+                .addCredentialOption(googleIdTokenOption)
+                .build()
 
         return try {
             val result = credentialManager.getCredential(context, request)
@@ -38,8 +42,8 @@ class AndroidGoogleAuthHandler(
         }
     }
 
-    private fun handleException(e: GetCredentialException): GoogleSignInResult {
-        return when (e) {
+    private fun handleException(e: GetCredentialException): GoogleSignInResult =
+        when (e) {
             is GetCredentialCancellationException -> {
                 println("Google Auth: User cancelled the sign-in flow.")
                 GoogleSignInResult.Cancelled
@@ -58,5 +62,4 @@ class AndroidGoogleAuthHandler(
                 GoogleSignInResult.Failure(errorMessage)
             }
         }
-    }
 }

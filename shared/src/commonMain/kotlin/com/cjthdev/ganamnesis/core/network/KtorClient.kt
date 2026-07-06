@@ -7,15 +7,17 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-fun createHttpClient(): HttpClient {
-    return HttpClient {
+fun createHttpClient(): HttpClient =
+    HttpClient {
         install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-                encodeDefaults = true
-            })
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                },
+            )
         }
         install(Logging) {
             logger = Logger.DEFAULT
@@ -27,4 +29,3 @@ fun createHttpClient(): HttpClient {
             socketTimeoutMillis = 15000
         }
     }
-}

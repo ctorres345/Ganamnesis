@@ -11,7 +11,13 @@ interface GoogleAuthHandler {
 }
 
 sealed class GoogleSignInResult {
-    data class Success(val idToken: String) : GoogleSignInResult()
-    data class Failure(val message: String) : GoogleSignInResult()
+    data class Success(
+        val idToken: String,
+    ) : GoogleSignInResult()
+
+    data class Failure(
+        val message: String,
+    ) : GoogleSignInResult()
+
     object Cancelled : GoogleSignInResult()
 }

@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {
     suspend fun searchGames(query: String): Result<List<Game>>
+
     fun syncSteamLibrary(): Flow<SyncStatus>
+
     suspend fun addGame(game: Game): Result<Unit>
+
     fun getLibrary(): Flow<List<Game>>
 }

@@ -29,8 +29,8 @@ interface UiEffect
  * Base ViewModel for MVI architecture (KMP compatible)
  */
 abstract class BaseViewModel<S : UiState, I : UiIntent, E : UiEffect> : ViewModel() {
-
     private val initialState: S by lazy { createInitialState() }
+
     abstract fun createInitialState(): S
 
     private val _uiState: MutableStateFlow<S> = MutableStateFlow(initialState)

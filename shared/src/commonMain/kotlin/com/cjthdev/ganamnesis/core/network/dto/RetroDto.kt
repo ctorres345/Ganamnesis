@@ -9,5 +9,5 @@ data class RetroUserSummaryDto(
     @SerialName("Motto") val motto: String? = null,
     @SerialName("TotalPoints") val totalPoints: Int? = null,
     @SerialName("TotalTruePoints") val totalTruePoints: Int? = null,
-    @SerialName("UserPic") val userPic: String? = null
+    @SerialName("UserPic") val userPic: String? = null,
 )

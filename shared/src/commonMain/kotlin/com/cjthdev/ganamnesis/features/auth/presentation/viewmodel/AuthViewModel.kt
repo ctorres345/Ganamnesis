@@ -4,45 +4,66 @@ import androidx.lifecycle.viewModelScope
 import com.cjthdev.ganamnesis.core.common.BaseViewModel
 import com.cjthdev.ganamnesis.core.common.GoogleAuthHandler
 import com.cjthdev.ganamnesis.core.common.GoogleSignInResult
+import com.cjthdev.ganamnesis.features.auth.domain.usecase.GoogleSignInUseCase
 import com.cjthdev.ganamnesis.features.auth.domain.usecase.LoginUseCase
+import com.cjthdev.ganamnesis.features.auth.domain.usecase.SignUpUseCase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
-    private val googleAuthHandler: GoogleAuthHandler
+    private val googleSignInUseCase: GoogleSignInUseCase,
+    private val signUpUseCase: SignUpUseCase,
+    private val googleAuthHandler: GoogleAuthHandler,
 ) : BaseViewModel<AuthState, AuthIntent, AuthEffect>() {
-
     override fun createInitialState(): AuthState = AuthState()
 
     override fun handleIntent(intent: AuthIntent) {
         when (intent) {
             is AuthIntent.Login -> performLogin(intent.email, intent.password)
-            is AuthIntent.SignUp -> performSignUp(intent.email, intent.password)
+            is AuthIntent.SignUp -> performSignUp(intent.email, intent.password, intent.username)
             is AuthIntent.SendPasswordReset -> performPasswordReset(intent.email)
             AuthIntent.LoginWithGoogle -> performGoogleLogin()
             AuthIntent.Logout -> { /* Handle logout */ }
         }
     }
 
-    private fun performLogin(email: String, password: String) {
+    private fun performLogin(
+        email: String,
+        password: String,
+    ) {
         viewModelScope.launch {
             setState { copy(isLoading = true, error = null) }
-            val result = loginUseCase.login(LoginUseCase.LoginParams(email, password))
-            result.onSuccess { user ->
-                setState { copy(isLoading = false, user = user) }
-                setEffect { AuthEffect.NavigateToHome }
-            }.onFailure { exception ->
-                setState { copy(isLoading = false, error = exception.message) }
-                setEffect { AuthEffect.ShowError(exception.message ?: "Unknown error") }
+            loginUseCase(LoginUseCase.Params(email, password)).collect { result ->
+                result
+                    .onSuccess { user ->
+                        setState { copy(isLoading = false, user = user) }
+                        setEffect { AuthEffect.NavigateToHome }
+                    }.onFailure { exception ->
+                        setState { copy(isLoading = false, error = exception.message) }
+                        setEffect { AuthEffect.ShowError(exception.message ?: "Unknown error") }
+                    }
             }
         }
     }
 
-    private fun performSignUp(email: String, password: String) {
+    private fun performSignUp(
+        email: String,
+        password: String,
+        username: String,
+    ) {
         viewModelScope.launch {
             setState { copy(isLoading = true, error = null) }
-            // For now, let's just simulate or add a SignUp method to LoginUseCase later
-            setState { copy(isLoading = false, error = "SignUp not yet implemented") }
+            signUpUseCase(SignUpUseCase.Params(email, password, username)).collect { result ->
+                result
+                    .onSuccess { user ->
+                        setState { copy(isLoading = false, user = user) }
+                        setEffect { AuthEffect.NavigateToHome }
+                    }.onFailure { exception ->
+                        setState { copy(isLoading = false, error = exception.message) }
+                        setEffect { AuthEffect.ShowError(exception.message ?: "Unknown error") }
+                    }
+            }
         }
     }
 
@@ -59,13 +80,15 @@ class AuthViewModel(
             setState { copy(isLoading = true, error = null) }
             when (val result = googleAuthHandler.signIn()) {
                 is GoogleSignInResult.Success -> {
-                    val loginResult = loginUseCase.loginWithGoogle(result.idToken)
-                    loginResult.onSuccess { user ->
-                        setState { copy(isLoading = false, user = user) }
-                        setEffect { AuthEffect.NavigateToHome }
-                    }.onFailure { exception ->
-                        setState { copy(isLoading = false, error = exception.message) }
-                        setEffect { AuthEffect.ShowError(exception.message ?: "Unknown error") }
+                    googleSignInUseCase(result.idToken).collect { loginResult ->
+                        loginResult
+                            .onSuccess { user ->
+                                setState { copy(isLoading = false, user = user) }
+                                setEffect { AuthEffect.NavigateToHome }
+                            }.onFailure { exception ->
+                                setState { copy(isLoading = false, error = exception.message) }
+                                setEffect { AuthEffect.ShowError(exception.message ?: "Unknown error") }
+                            }
                     }
                 }
                 is GoogleSignInResult.Cancelled -> {

@@ -14,8 +14,9 @@ data class Game(
     val genres: List<String> = emptyList(),
     val developers: List<String> = emptyList(),
     val publishers: List<String> = emptyList(),
+    val screenshots: List<String> = emptyList(),
     val steamId: String? = null,
-    val rawgId: String? = null,
+    val igdbId: String? = null,
     val franchise: String? = null,
-    val hasRetroAchievements: Boolean = false
+    val hasRetroAchievements: Boolean = false,
 )

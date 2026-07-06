@@ -1,0 +1,20 @@
+root = true
+
+[*.{kt,kts}]
+indent_size = 4
+insert_final_newline = true
+max_line_length = 160
+ktlint_function_naming_ignore_when_annotated_with = Composable
+# Compose UI code idiomatically imports whole packages (androidx.compose.foundation.layout.*,
+# androidx.compose.material3.*, etc.) given how many individual symbols they export.
+ktlint_standard_no-wildcard-imports = disabled
+# DTO files in this project group several related data classes under one thematic file name
+# (e.g. SteamDto.kt, IgdbDto.kt) rather than one file per class.
+ktlint_standard_filename = disabled
+
+# Compose Multiplatform's own generated resource-accessor code (Res.kt, Drawable0.commonMain.kt,
+# etc.) gets swept into the "commonMain"/"androidMain" Kotlin source sets and linted alongside our
+# own source. We don't own that code and can't fix violations in it (it's regenerated every
+# build), so disable style enforcement for anything under a "generated" directory.
+[**/generated/**/*.kt]
+ktlint_standard = disabled

@@ -36,17 +36,18 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LandingScreen(
     onGetStarted: () -> Unit,
-    onSignIn: () -> Unit
+    onSignIn: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             // 1. Header Area
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -56,14 +57,14 @@ fun LandingScreen(
                 Surface(
                     shape = RoundedCornerShape(20.dp),
                     color = Color(0xFF3E2723), // Dark Brown
-                    modifier = Modifier.size(60.dp)
+                    modifier = Modifier.size(60.dp),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             "G",
                             color = Color.White,
                             fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
                 }
@@ -72,46 +73,49 @@ fun LandingScreen(
 
                 // Title with multi-style text
                 Text(
-                    text = buildAnnotatedString {
-                        append("Track your games with\n")
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color(0xFF795548),
-                                fontWeight = FontWeight.ExtraBold
-                            )
-                        ) {
-                            append("Ganamnesis")
-                        }
-                    },
+                    text =
+                        buildAnnotatedString {
+                            append("Track your games with\n")
+                            withStyle(
+                                style =
+                                    SpanStyle(
+                                        color = Color(0xFF795548),
+                                        fontWeight = FontWeight.ExtraBold,
+                                    ),
+                            ) {
+                                append("Ganamnesis")
+                            }
+                        },
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Center,
-                    lineHeight = 36.sp
+                    lineHeight = 36.sp,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Subtitle
                 Text(
-                    text = "The ultimate companion for your gaming backlog and achievements 🎮",
+                    text = "Your pocket game library",
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = Color.Gray,
-                    modifier = Modifier.padding(horizontal = 24.dp)
+                    modifier = Modifier.padding(horizontal = 24.dp),
                 )
             }
 
             // 2. Illustration Area (Center)
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 // Use a placeholder for the character illustration
                 Surface(
                     modifier = Modifier.size(240.dp),
                     shape = RoundedCornerShape(120.dp),
-                    color = Color(0xFFE8F5E9) // Light green background
+                    color = Color(0xFFE8F5E9), // Light green background
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text("🎮", fontSize = 100.sp) // Replace with Image later
@@ -122,24 +126,25 @@ fun LandingScreen(
             // 3. Action Area (Bottom)
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Button(
                     onClick = onGetStarted,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
                     shape = RoundedCornerShape(28.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3E2723))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3E2723)),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text("Get Started", fontSize = 18.sp)
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }

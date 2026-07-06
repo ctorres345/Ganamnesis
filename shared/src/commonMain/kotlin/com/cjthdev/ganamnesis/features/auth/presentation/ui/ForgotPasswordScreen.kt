@@ -12,40 +12,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cjthdev.ganamnesis.core.ui.components.GanamnesisButton
 import com.cjthdev.ganamnesis.core.ui.components.GanamnesisTextField
+import com.cjthdev.ganamnesis.features.auth.presentation.viewmodel.AuthEffect
 import com.cjthdev.ganamnesis.features.auth.presentation.viewmodel.AuthIntent
 import com.cjthdev.ganamnesis.features.auth.presentation.viewmodel.AuthViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun ForgotPasswordScreen(
-    onNavigateBack: () -> Unit
-) {
+fun ForgotPasswordScreen(onNavigateBack: () -> Unit) {
     val viewModel: AuthViewModel = koinInject()
     val state by viewModel.uiState.collectAsState()
 
     var email by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(48.dp))
-            
+
             Text(
                 text = "Forgot Password",
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
-            
+
             Text(
                 text = "Please enter your email address to reset your password",
                 fontSize = 14.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -55,7 +56,7 @@ fun ForgotPasswordScreen(
                 onValueChange = { email = it },
                 label = "Email Address",
                 placeholder = "Enter your email address...",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -65,7 +66,7 @@ fun ForgotPasswordScreen(
             } else {
                 GanamnesisButton(
                     text = "Send Password",
-                    onClick = { viewModel.handleIntent(AuthIntent.SendPasswordReset(email)) }
+                    onClick = { viewModel.handleIntent(AuthIntent.SendPasswordReset(email)) },
                 )
             }
 
@@ -73,7 +74,15 @@ fun ForgotPasswordScreen(
                 Text(
                     "Reset link sent! Please check your inbox.",
                     color = Color(0xFF43A047),
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp),
+                )
+            }
+
+            if (errorMessage != null) {
+                Text(
+                    errorMessage.orEmpty(),
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 16.dp),
                 )
             }
 
@@ -81,6 +90,16 @@ fun ForgotPasswordScreen(
 
             TextButton(onClick = onNavigateBack) {
                 Text("Back to Sign In", color = Color.Gray)
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is AuthEffect.ShowError -> errorMessage = effect.message
+                AuthEffect.NavigateToHome -> Unit
+                AuthEffect.NavigateToLogin -> Unit
             }
         }
     }

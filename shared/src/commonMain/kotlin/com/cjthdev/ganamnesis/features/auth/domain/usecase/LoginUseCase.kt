@@ -7,15 +7,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class LoginUseCase(
-    private val authRepository: AuthRepository
-) {
-    suspend fun login(params: LoginParams): Result<User> {
-        return authRepository.login(params.email, params.password)
-    }
+    private val authRepository: AuthRepository,
+) : UseCase<LoginUseCase.Params, Result<User>> {
+    override fun invoke(params: Params): Flow<Result<User>> =
+        flow {
+            emit(authRepository.login(params.email, params.password))
+        }
 
-    suspend fun loginWithGoogle(idToken: String): Result<User> {
-        return authRepository.loginWithGoogle(idToken)
-    }
-
-    data class LoginParams(val email: String, val password: String)
+    data class Params(
+        val email: String,
+        val password: String,
+    )
 }
